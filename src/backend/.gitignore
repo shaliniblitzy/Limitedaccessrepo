@@ -1,0 +1,58 @@
+# Node.js Dependencies
+# Ignore all installed dependencies managed by npm. These are restored via package.json and should never be committed.
+node_modules/
+
+# Build Output Directories
+# Ignore build output directory if present. Ensures compiled or bundled files are not tracked.
+dist/
+
+# Ignore alternative build output directory.
+build/
+
+# Log Files
+# Ignore all log files generated during development or runtime.
+*.log
+
+# Ignore npm debug logs.
+npm-debug.log*
+
+# Environment Configuration Files
+# Ignore environment variable files containing sensitive configuration.
+.env
+
+# Ignore all environment-specific variable files (e.g., .env.development, .env.production).
+.env.*
+
+# Ignore local override configuration files.
+*.local
+
+# Operating System Files
+# Ignore macOS Finder metadata files.
+.DS_Store
+
+# Ignore backup files created by editors.
+*~
+
+# Editor and IDE Configuration
+# Ignore Visual Studio Code workspace settings.
+.vscode/
+
+# Ignore JetBrains IDE project files.
+.idea/
+
+# Ignore Vim swap files.
+*.swp
+
+# Ignore Vim swap files.
+*.swo
+
+# Testing and Coverage
+# Ignore code coverage output from test runs.
+coverage/
+
+# Ignore test result files in XML format.
+*.test-results.xml
+
+# Development Tools
+# Optionally ignore Node version manager file if not intended for sharing.
+.nvmrc

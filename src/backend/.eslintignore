@@ -1,0 +1,33 @@
+# ESLint ignore patterns for backend source folder
+# This file specifies files and directories to be ignored by ESLint
+# to improve linting performance and avoid unnecessary errors/warnings
+
+# Dependencies
+node_modules/
+
+# Build outputs and artifacts
+dist/
+build/
+
+# Log files
+*.log
+
+# Test files
+*.test.mjs
+test/
+
+# Scripts and utilities
+scripts/
+
+# Configuration files
+*.config.js
+*.config.mjs
+.eslintrc.json
+.eslintignore
+.gitignore
+.nvmrc
+jsconfig.json
+package.json
+
+# Documentation
+README.md

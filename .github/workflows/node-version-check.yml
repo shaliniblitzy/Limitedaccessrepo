@@ -1,0 +1,105 @@
+name: Node.js Version Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  node-version-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # actions/checkout v4
+
+      - name: Read .nvmrc version
+        id: nvmrc
+        run: |
+          NVMRC_VERSION=$(cat src/backend/.nvmrc)
+          echo "NVMRC_VERSION=$NVMRC_VERSION" >> $GITHUB_ENV
+          echo "Found .nvmrc version: $NVMRC_VERSION"
+
+      - name: Read package.json engines version
+        id: pkgjson
+        run: |
+          PKGJSON_VERSION=$(node -p "require('./src/backend/package.json').engines.node")
+          echo "PKGJSON_VERSION=$PKGJSON_VERSION" >> $GITHUB_ENV
+          echo "Found package.json engines.node version: $PKGJSON_VERSION"
+
+      - name: Set up Node.js ${{ env.NVMRC_VERSION }}
+        uses: actions/setup-node@v4  # actions/setup-node v4
+        with:
+          node-version: ${{ env.NVMRC_VERSION }}
+
+      - name: Validate Node.js version consistency
+        run: |
+          # Get the actual Node.js version that was installed
+          NODE_VERSION=$(node --version | sed 's/v//')
+          echo "Actual Node.js version: $NODE_VERSION"
+          echo "Expected from .nvmrc: $NVMRC_VERSION"
+          echo "Required by package.json: $PKGJSON_VERSION"
+          
+          # Check if the installed version matches .nvmrc
+          if [ "$NODE_VERSION" != "$NVMRC_VERSION" ]; then
+            echo "::error::Node.js version mismatch: .nvmrc specifies $NVMRC_VERSION, but running $NODE_VERSION"
+            exit 1
+          fi
+          
+          # Check if .nvmrc version satisfies package.json engines requirement
+          # Using Node.js built-in comparison without external dependencies
+          if ! node -e "
+            const nvmrcVersion = process.env.NVMRC_VERSION;
+            const pkgJsonVersion = process.env.PKGJSON_VERSION;
+            
+            // Parse the package.json version constraint (>=22.0.0)
+            const match = pkgJsonVersion.match(/^>=?(\d+\.\d+\.\d+)$/);
+            if (!match) {
+              console.error('Unable to parse package.json version constraint:', pkgJsonVersion);
+              process.exit(1);
+            }
+            
+            const requiredVersion = match[1];
+            
+            // Simple version comparison for major.minor.patch format
+            const parseVersion = (v) => v.split('.').map(Number);
+            const [nvmrcMajor, nvmrcMinor, nvmrcPatch] = parseVersion(nvmrcVersion);
+            const [reqMajor, reqMinor, reqPatch] = parseVersion(requiredVersion);
+            
+            // Check if nvmrc version satisfies the requirement
+            if (nvmrcMajor > reqMajor || 
+                (nvmrcMajor === reqMajor && nvmrcMinor > reqMinor) ||
+                (nvmrcMajor === reqMajor && nvmrcMinor === reqMinor && nvmrcPatch >= reqPatch)) {
+              console.log('✅ Version constraint satisfied');
+            } else {
+              console.error('❌ Version constraint not satisfied');
+              process.exit(1);
+            }
+          "; then
+            echo "::error::Node.js version in .nvmrc ($NVMRC_VERSION) does not satisfy package.json engines requirement ($PKGJSON_VERSION)"
+            exit 1
+          fi
+          
+          echo "✅ Node.js version check passed: $NODE_VERSION"
+          echo "✅ All version sources are consistent:"
+          echo "  - .nvmrc: $NVMRC_VERSION"
+          echo "  - package.json engines.node: $PKGJSON_VERSION"
+          echo "  - Actual Node.js: $NODE_VERSION"
+
+      - name: Version Summary
+        run: |
+          echo "## Node.js Version Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Source | Version | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| .nvmrc | $NVMRC_VERSION | ✅ Valid |" >> $GITHUB_STEP_SUMMARY
+          echo "| package.json engines.node | $PKGJSON_VERSION | ✅ Valid |" >> $GITHUB_STEP_SUMMARY
+          echo "| Actual Node.js | $(node --version) | ✅ Valid |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Result:** All Node.js version sources are consistent and match the required version (22.x LTS)." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This automated check ensures that:" >> $GITHUB_STEP_SUMMARY
+          echo "- Development environments use the correct Node.js version via .nvmrc" >> $GITHUB_STEP_SUMMARY
+          echo "- Package.json engines field enforces the minimum required version" >> $GITHUB_STEP_SUMMARY
+          echo "- CI/CD pipelines use the exact version specified in .nvmrc" >> $GITHUB_STEP_SUMMARY
+          echo "- Version drift is prevented across all environments" >> $GITHUB_STEP_SUMMARY

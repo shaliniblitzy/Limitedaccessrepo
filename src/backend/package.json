@@ -1,0 +1,36 @@
+{
+  "name": "nodejs-tutorial-backend",
+  "version": "1.0.0",
+  "description": "A minimalist Node.js HTTP server tutorial backend demonstrating core server, routing, and error handling concepts using only built-in modules.",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node ./scripts/start.mjs",
+    "dev": "node ./scripts/dev.mjs",
+    "test": "node --test",
+    "test:unit": "node --test ./../test/unit",
+    "test:integration": "node --test ./../test/integration", 
+    "test:performance": "node --test ./../test/performance",
+    "coverage": "node --test --experimental-test-coverage"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "author": "Tutorial Authors <tutorial@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/nodejs-tutorial-backend.git"
+  },
+  "keywords": [
+    "nodejs",
+    "http",
+    "tutorial",
+    "server",
+    "educational",
+    "esm",
+    "zero-dependencies"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}

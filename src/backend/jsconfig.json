@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2022",
+    "checkJs": true,
+    "allowJs": true,
+    "moduleResolution": "NodeNext",
+    "baseUrl": ".",
+    "paths": {
+      "@utils/*": ["utils/*"],
+      "@handlers/*": ["handlers/*"],
+      "@routes/*": ["routes/*"],
+      "@scripts/*": ["scripts/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": false
+  },
+  "include": [
+    "./*"
+  ]
+}

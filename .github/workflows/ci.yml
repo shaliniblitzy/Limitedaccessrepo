@@ -1,0 +1,248 @@
+# GitHub Actions CI Workflow for Node.js Tutorial HTTP Server
+# This workflow automates the complete CI/CD pipeline for the Node.js tutorial project,
+# enforcing code quality, correctness, and performance standards for every commit.
+# 
+# Educational Purpose: Demonstrates modern CI/CD practices using GitHub Actions with
+# Node.js 22.x LTS, zero external runtime dependencies, and comprehensive testing.
+name: CI
+
+# Workflow triggers - activate CI on pushes and pull requests to main branch
+# This ensures all code changes are validated before integration into the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Environment variables for consistent test execution across all jobs
+env:
+  NODE_ENV: test
+  CI: true
+  # Enable colored output for better readability in GitHub Actions logs
+  FORCE_COLOR: 1
+
+# Define the CI jobs that will run in parallel or sequence
+jobs:
+  # Main build and test job - encompasses all validation steps
+  build-and-test:
+    name: Build and Test (Node.js ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    
+    # Strategy matrix for testing multiple Node.js versions
+    # Currently focuses on Node.js 22.x LTS as specified in requirements
+    strategy:
+      matrix:
+        node-version: ['22.x']
+    
+    # Define the sequence of steps for comprehensive CI validation
+    steps:
+      # Step 1: Checkout the repository code
+      # Uses actions/checkout@v4 for secure and efficient repository access
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for complete Git context
+          fetch-depth: 0
+      
+      # Step 2: Setup Node.js environment
+      # Uses actions/setup-node@v4 for consistent Node.js 22.x LTS environment
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          # Cache npm dependencies for faster builds
+          cache: 'npm'
+          cache-dependency-path: |
+            src/backend/package-lock.json
+            src/test/package-lock.json
+      
+      # Step 3: Display environment information for debugging and verification
+      - name: Display environment information
+        run: |
+          echo "Node.js version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          echo "Operating System: $(uname -a)"
+          echo "Working directory: $(pwd)"
+          echo "NODE_ENV: $NODE_ENV"
+          echo "CI: $CI"
+      
+      # Step 4: Install backend dependencies
+      # Uses npm ci for clean, reproducible dependency installation
+      - name: Install backend dependencies
+        run: |
+          cd src/backend
+          echo "Installing backend dependencies..."
+          npm ci
+          echo "Backend dependencies installed successfully"
+          echo "Backend package.json validation:"
+          npm ls --depth=0
+        
+      # Step 5: Install test suite dependencies
+      # Installs development dependencies needed for testing infrastructure
+      - name: Install test suite dependencies
+        run: |
+          cd src/test
+          echo "Installing test suite dependencies..."
+          npm ci
+          echo "Test suite dependencies installed successfully"
+          echo "Test suite package.json validation:"
+          npm ls --depth=0
+      
+      # Step 6: Lint backend code
+      # Validates backend code quality and style consistency
+      - name: Lint backend code
+        run: |
+          cd src/backend
+          echo "Running backend linting..."
+          npm run lint
+          echo "Backend linting completed successfully"
+      
+      # Step 7: Lint test code
+      # Validates test code quality and style consistency
+      - name: Lint test code
+        run: |
+          cd src/test
+          echo "Running test suite linting..."
+          npm run lint
+          echo "Test suite linting completed successfully"
+      
+      # Step 8: Run backend unit tests
+      # Executes backend-specific unit tests using Node.js built-in test runner
+      - name: Run backend unit tests
+        run: |
+          cd src/backend
+          echo "Running backend unit tests..."
+          npm run test:unit
+          echo "Backend unit tests completed successfully"
+      
+      # Step 9: Run backend integration tests
+      # Executes backend-specific integration tests
+      - name: Run backend integration tests
+        run: |
+          cd src/backend
+          echo "Running backend integration tests..."
+          npm run test:integration
+          echo "Backend integration tests completed successfully"
+      
+      # Step 10: Run comprehensive test suite
+      # Executes all test suites (unit, integration, performance) using test runner script
+      - name: Run comprehensive test suite
+        run: |
+          cd src/test
+          echo "Running comprehensive test suite..."
+          npm run test
+          echo "Comprehensive test suite completed successfully"
+      
+      # Step 11: Run test suite unit tests
+      # Executes test suite-specific unit tests
+      - name: Run test suite unit tests
+        run: |
+          cd src/test
+          echo "Running test suite unit tests..."
+          npm run test:unit
+          echo "Test suite unit tests completed successfully"
+      
+      # Step 12: Run test suite integration tests
+      # Executes test suite-specific integration tests
+      - name: Run test suite integration tests
+        run: |
+          cd src/test
+          echo "Running test suite integration tests..."
+          npm run test:integration
+          echo "Test suite integration tests completed successfully"
+      
+      # Step 13: Generate code coverage report
+      # Runs comprehensive code coverage analysis using Node.js built-in coverage
+      - name: Generate code coverage report
+        run: |
+          cd src/test
+          echo "Generating code coverage report..."
+          npm run coverage
+          echo "Code coverage analysis completed successfully"
+      
+      # Step 14: Run performance tests
+      # Validates performance requirements (response time, memory usage, startup time)
+      - name: Run performance tests
+        run: |
+          cd src/test
+          echo "Running performance tests..."
+          npm run test:performance
+          echo "Performance tests completed successfully"
+      
+      # Step 15: Upload coverage reports as artifacts
+      # Preserves coverage reports for review and analysis
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports-node-${{ matrix.node-version }}
+          path: |
+            src/test/coverage/
+            src/test/.coverage/
+            src/backend/coverage/
+            src/backend/.coverage/
+          # Retain coverage reports for 30 days
+          retention-days: 30
+      
+      # Step 16: Upload test results as artifacts
+      # Preserves test output for debugging and analysis
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-node-${{ matrix.node-version }}
+          path: |
+            src/test/test-results/
+            src/backend/test-results/
+          retention-days: 30
+      
+      # Step 17: Display success summary
+      # Provides comprehensive success confirmation for educational clarity
+      - name: Display success summary
+        if: success()
+        run: |
+          echo "🎉 CI Pipeline completed successfully!"
+          echo ""
+          echo "✅ Validation Summary:"
+          echo "  - Repository checkout: SUCCESS"
+          echo "  - Node.js ${{ matrix.node-version }} setup: SUCCESS"
+          echo "  - Backend dependencies installation: SUCCESS"
+          echo "  - Test suite dependencies installation: SUCCESS"
+          echo "  - Backend code linting: SUCCESS"
+          echo "  - Test code linting: SUCCESS"
+          echo "  - Backend unit tests: SUCCESS"
+          echo "  - Backend integration tests: SUCCESS"
+          echo "  - Comprehensive test suite: SUCCESS"
+          echo "  - Test suite unit tests: SUCCESS"
+          echo "  - Test suite integration tests: SUCCESS"
+          echo "  - Code coverage analysis: SUCCESS"
+          echo "  - Performance tests: SUCCESS"
+          echo "  - Artifact uploads: SUCCESS"
+          echo ""
+          echo "📊 Quality Metrics:"
+          echo "  - Code quality: VALIDATED"
+          echo "  - Test coverage: GENERATED"
+          echo "  - Performance requirements: VERIFIED"
+          echo "  - CI/CD integration: OPERATIONAL"
+          echo ""
+          echo "🚀 The Node.js tutorial HTTP server is ready for:"
+          echo "  - Educational use and demonstrations"
+          echo "  - Further development and extension"
+          echo "  - Production deployment (with appropriate scaling)"
+          echo ""
+          echo "Educational Value: This CI workflow demonstrates modern"
+          echo "development practices using Node.js 22.x LTS, zero external"
+          echo "runtime dependencies, and comprehensive automated testing."
+
+  # Optional: Separate job for security scanning (can be added in the future)
+  # security-scan:
+  #   name: Security Scan
+  #   runs-on: ubuntu-latest
+  #   needs: build-and-test
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #     - name: Run security audit
+  #       run: |
+  #         cd src/backend && npm audit
+  #         cd src/test && npm audit

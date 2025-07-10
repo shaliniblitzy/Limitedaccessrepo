@@ -1,0 +1,28 @@
+# Testing artifacts and coverage reports
+coverage/
+coverage.*
+.nyc_output/
+test-results/
+
+# Temporary files and logs
+*.log
+*.tmp
+*.temp
+*.out
+*.pid
+
+# Cache directories
+.cache/
+node_modules/
+
+# System files
+.DS_Store
+
+# Editor temporary files
+*.swp
+*.swo
+
+# Backup and patch files
+*.bak
+*.orig
+*.rej

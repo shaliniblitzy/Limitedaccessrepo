@@ -1,0 +1,41 @@
+{
+  "name": "nodejs-tutorial-test-suite",
+  "version": "1.0.0",
+  "description": "Test suite manifest for the Node.js HTTP server tutorial. Provides scripts for running, automating, and linting all test suites using the Node.js built-in test runner. Enforces Node.js 22.x LTS, ES Modules, and zero runtime dependencies. Designed for educational clarity and CI/CD integration.",
+  "type": "module",
+  "private": true,
+  "author": "Tutorial Authors <tutorial@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/nodejs-tutorial-backend.git"
+  },
+  "keywords": [
+    "nodejs",
+    "test",
+    "tutorial",
+    "http",
+    "server",
+    "esm",
+    "educational",
+    "zero-dependencies"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "test": "node ./scripts/run-tests.mjs",
+    "test:unit": "node --test ./unit",
+    "test:integration": "node --test ./integration",
+    "test:performance": "node ./scripts/run-performance.mjs",
+    "coverage": "node ./scripts/run-coverage.mjs",
+    "lint": "eslint . --ext .js,.mjs",
+    "lint:fix": "eslint . --ext .js,.mjs --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "sinon": "^17.0.0"
+  }
+}
