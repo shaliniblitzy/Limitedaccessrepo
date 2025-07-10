@@ -1,0 +1,303 @@
+# Node.js Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package Lock Files (optional - uncomment if not committing lockfiles)
+# package-lock.json
+
+# Build and Distribution Output
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# Test Coverage Reports
+coverage/
+.nyc_output/
+.test-coverage/
+
+# Environment and Configuration Files
+.env
+.env.*
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Subfolder Environment Files
+src/backend/.env
+src/test/.env
+infrastructure/.env
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+
+# Editor and IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+
+# Logs and Temporary Files
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+
+# Runtime and Process Files
+*.pid
+*.seed
+*.pid.lock
+.lock-wscript
+node_repl_history
+
+# Temporary Directories
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Docker Files
+docker-compose.override.yml
+docker-data/
+.dockerignore
+
+# Single Executable Application (SEA) Build Files
+*.blob
+sea-config.json
+*.exe
+hello-server
+hello-server.exe
+
+# Testing Files
+.eslintcache
+test-results/
+playwright-report/
+test-results.xml
+
+# Cache Directories
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vuepress/dist/
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage Directory Used by Tools Like Istanbul
+coverage/
+*.lcov
+
+# Dependency Directories
+jspm_packages/
+
+# Optional npm Cache Directory
+.npm
+
+# Optional ESLint Cache
+.eslintcache
+
+# Optional Stylelint Cache
+.stylelintcache
+
+# Microbundle Cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL History
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity File
+.yarn-integrity
+
+# DotEnv Environment Variables File
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Parcel-bundler Cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js Build Output
+.next
+out
+
+# Nuxt.js Build / Generate Output
+.nuxt
+dist
+
+# Gatsby Files
+.cache/
+public
+
+# Vuepress Build Output
+.vuepress/dist
+
+# Serverless Directories
+.serverless/
+
+# FuseBox Cache
+.fusebox/
+
+# DynamoDB Local Files
+.dynamodb/
+
+# TernJS Port File
+.tern-port
+
+# Stores VSCode Versions Used for Testing VSCode Extensions
+.vscode-test
+
+# Yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+# Windows
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Linux
+*~
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Emacs
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Backup Files
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+
+# Archive Files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Security and Sensitive Files
+*.pem
+*.key
+*.crt
+*.csr
+*.cert
+*.p12
+*.pfx
+secrets.json
+.secrets
+
+# Cloud and Deployment Files
+.aws/
+.gcp/
+.azure/
+terraform.tfstate*
+*.tfvars
+.terraform/
+
+# Monitoring and APM
+newrelic_agent.log
+.pm2/
+
+# Documentation Build
+docs/_build/
+site/
+
+# Local Configuration
+.local
+.config
